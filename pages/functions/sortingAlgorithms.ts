@@ -7,9 +7,9 @@ export const bubbleSort = (data: Array<number>) => {
 
     for (let n = 0; n < length - i - 1; n++) {
       if (data[n] > data[n+1]) {
-        const hold = data[n];
+        const temp = data[n];
         data[n] = data[n+1];
-        data[n+1] = hold;
+        data[n+1] = temp;
         isSwapped = true;
       }
     }
@@ -34,10 +34,30 @@ export const selectionSort = (data: Array<number>) => {
     }
 
     if (minIndex !== i) {
-      const hold = data[i];
+      const temp = data[i];
       data[i] = data[minIndex];
-      data[minIndex] = hold;
+      data[minIndex] = temp;
     }
+  }
+
+  return data;
+};
+
+// For each index, compares each number to every number before it until the correct position is found
+export const insertionSort = (data: Array<number>) => {
+  const length = data.length;
+
+  for (let i = 1; i < length; i++) {
+    const temp = data[i];
+
+    let minIndex = i;
+
+    while (minIndex > 0 && temp < data[minIndex - 1]) {
+      data[minIndex] = data[minIndex - 1];
+      minIndex -= 1
+    }
+
+    data[minIndex] = temp;
   }
 
   return data;
