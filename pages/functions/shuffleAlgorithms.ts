@@ -14,4 +14,4 @@ export const knuthShuffle = (array: Array<number>) => {
   }
 
   return array;
-}
+};
