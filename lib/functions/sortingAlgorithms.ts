@@ -37,6 +37,8 @@ export const selectionSort = (data: Array<number>) => {
       const temp = data[i];
       data[i] = data[minIndex];
       data[minIndex] = temp;
+      // test if the below code is more efficient for this block
+      // [data[i], data[minIndex]] = [data[minIndex], data[i]];
     }
   }
 
@@ -61,4 +63,34 @@ export const insertionSort = (data: Array<number>) => {
   }
 
   return data;
+};
+
+// 
+export const quickSort = (data: Array<number>, low = 0, high = data.length - 1) => {
+
+};
+
+//
+export const mergeSort = (data: Array<number>) => {
+
+};
+
+//
+export const bucketSort = (data: Array<number>) => {
+
+};
+
+//
+export const shellSort = (data: Array<number>, length: number) => {
+
+};
+
+//
+export const heapSort = (data: Array<number>) => {
+
+};
+
+//
+export const timSort = (data: Array<number>, left: number, right: number) => {
+
 };
