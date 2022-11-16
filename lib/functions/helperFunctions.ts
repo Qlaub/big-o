@@ -1,8 +1,8 @@
 import { knuthShuffle } from "./shuffleAlgorithms";
 
-// Create an array of numbers from 1 up through a given number
+// Returns a number array 1 through a given number
 export const generateData = (n: number) => {
-  const data = [];
+  const data: Array<number> = [];
 
   for (let i = 0; i < n; i++) {
     data.push(i + 1);
@@ -11,17 +11,18 @@ export const generateData = (n: number) => {
   return data;
 };
 
-//
-export const calculateTime = (n: number, algorithm: Function) => {
-  const dataArr = generateData(n);
+export const calculateTime = (n: number, sort: Function) => {
+  // Create randomized integer array
+  const data: Array<number> = generateData(n);
+  const randomData: Array<number> = knuthShuffle(data);
 
-  const randDataArr = knuthShuffle(dataArr);
+  // Capture time before and after sort
+  const time1: number = performance.now();
+  sort(randomData);
+  const time2: number = performance.now();
 
-  const t1 = performance.now();
-  algorithm(randDataArr);
-  const t2 = performance.now();
+  // Calculate difference as time elapsed
+  const timeElapsed = (time2 - time1) / 1000; // Convert milliseconds to seconds
 
-  const timeDiff = (t2 - t1) / 1000;
-
-  return timeDiff;
+  return timeElapsed;
 };

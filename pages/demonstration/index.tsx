@@ -3,19 +3,21 @@ import { data } from "../../lib/data";
 import { calculateTime } from "../../lib/functions/helperFunctions";
 
 export default function Demonstration() {
+  const [chosenSort, setChosenSort] = useState<Function>(() => data[0].func);
+  const [n, setN] = useState(1);
   const [time, setTime] = useState(0);
-  const [chosenAlgo, setChosenAlgo] = useState<Function>(() => data[0].func);
-  const [num, setNum] = useState(1);
 
-  const handleChangeAlgo = (func: Function) => setChosenAlgo(() => func);
+  const handleChangeSort = (func: Function) => setChosenSort(() => func);
 
-  const handleChangeNum = (e: BaseSyntheticEvent) => setNum(e.target.value);
+  const handleChangeN = (val: number) => setN(val);
 
-  const handleCalculateTime = () => {
-    if (!chosenAlgo) return;
-    if (!num || num < 1) return;
+  const handleCalculateTime = (e: BaseSyntheticEvent) => {
+    e.preventDefault();
 
-    const time = calculateTime(num, chosenAlgo);
+    if (!chosenSort) return;
+    if (!n || n < 1) return;
+
+    const time = calculateTime(n, chosenSort);
 
     setTime(time);
   };
@@ -23,7 +25,7 @@ export default function Demonstration() {
   return (
     <div className="w-100vw flex items-center flex-col gap-5">
       <ul className="w-100vw flex items-center justify-center space-between gap-3">
-        {data.map((algo, i) => {
+        {data.map((sort, i) => {
           return (
             <li key={i}>
               <button 
@@ -34,37 +36,40 @@ export default function Demonstration() {
                   p-2 
                   hover:bg-white 
                   hover:text-black 
-                  ${algo.func === chosenAlgo && 'border-black bg-white text-black'}`
+                  ${sort.func === chosenSort && 'bg-white text-black'}`
                 }
-                onClick={(e) => handleChangeAlgo(algo.func)}
-                disabled={algo.func === chosenAlgo && true}
+                onClick={() => handleChangeSort(sort.func)}
+                disabled={sort.func === chosenSort && true}
               >
-                {algo.name}
+                {sort.name}
               </button>
             </li>
           )
         })}
       </ul>
-      <div className="flex flex-col gap-2 items-center">
+      <form 
+        className="flex flex-col gap-2 items-center"
+        onSubmit={(e) => handleCalculateTime(e)}
+      >
+        <label className="flex items-center gap-1">
+        n = 
+          <input 
+            className="bg-white text-black resize-none flex text-center w-28" 
+            type="number"
+            min="1"
+            value={n} 
+            onChange={e => handleChangeN(parseInt(e.target.value))}
+          />
+        </label>
         <div className="flex gap-1">
           <span>Time:</span>
           <div className="bg-zinc-700 text-white px-1">{time}</div>
           <span>seconds</span>
         </div>
-        <div className="flex items-center gap-1">
-        n = 
-          <textarea className="bg-white text-black resize-none flex text-center leading-3 pt-3 w-28" 
-            value={num} 
-            onChange={e => handleChangeNum(e)}
-          />
-        </div>
-        <button 
-          className="bg-white text-black rounded p-2"
-          onClick={handleCalculateTime}
-        >
+        <button className="bg-white text-black rounded p-2">
           Calculate Time
         </button>
-      </div>
+      </form>
     </div>
   )
 };

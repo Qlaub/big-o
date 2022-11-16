@@ -8,7 +8,7 @@ import {
   shellSort,
   heapSort,
   timSort, 
-} from "./functions/sortingAlgorithms";
+} from "./functions/sortAlgorithms";
 
 export const data = [
   {
