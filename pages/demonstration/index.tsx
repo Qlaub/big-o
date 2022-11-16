@@ -1,4 +1,5 @@
 import { BaseSyntheticEvent, useState } from "react";
+import Graph from "../../components/graph";
 import { data } from "../../lib/data";
 import { calculateTime } from "../../lib/functions/helperFunctions";
 
@@ -66,10 +67,13 @@ export default function Demonstration() {
           <div className="bg-zinc-700 text-white px-1">{time}</div>
           <span>seconds</span>
         </div>
-        <button className="bg-white text-black rounded p-2">
-          Calculate Time
+        <button className="bg-white text-black rounded-lg py-2 px-5">
+          Sort
         </button>
       </form>
+      <div className="w-[66vw]">
+        <Graph />
+      </div>
     </div>
   )
 };
