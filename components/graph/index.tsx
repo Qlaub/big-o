@@ -9,15 +9,50 @@ import {
   Legend,
 } from 'chart.js';
 import { useEffect, useState } from 'react';
-import { Line, Scatter } from 'react-chartjs-2';
+import { Scatter } from 'react-chartjs-2';
+import { data } from "../../lib/data";
+import { PointObject } from '../../pages/demonstration';
 
-export default function Graph() {
-  // const [graphData, setGraphData] = useState(
-  //   {
+interface DataPointObject {
+  x: number;
+  y: number;
+}
 
-  //   }
-  // );
-  const [labels, setLabels] = useState<Array<number>>([]);
+interface DatasetObject {
+  label: string;
+  data: Array<DataPointObject> | never;
+  borderColor: string;
+  backgroundColor: string;
+  showLine: boolean;
+}
+
+export default function Graph({ point }: { point: PointObject }) {
+  const [datasets, setDatasets] = useState<Array<DatasetObject>>(
+    data.map(({ name, borderColor, backgroundColor }) => {
+      return {
+        label: name,
+        data: [],
+        borderColor,
+        backgroundColor,
+        showLine: true,
+      }
+    })
+  );
+
+  useEffect(() => {
+    if (point.n === 0) return;
+
+    let index = 0;
+    const set = datasets.find((o, i) => {
+      if (o.label === point.sortName) {
+        index = i;
+        return true;
+      }
+    });
+    const newDataset = [...datasets]
+    newDataset[index].data.push({x: point.n, y: point.time})
+    setDatasets(newDataset);
+  }, [point]);
 
   ChartJS.register(
     CategoryScale,
@@ -29,76 +64,51 @@ export default function Graph() {
     Legend
   );
 
-  const options = {
+  const options: any = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'bottom' as const,
+        position: 'top',
       },
       title: {
         display: false,
         text: '',
       },
     },
-  };
-
-  // Note: Labels seem unnecessary
-  // Populate labels
-  useEffect(() => {
-    const temp = [];
-    for (let i = 0; i <= 1000; i++) {
-      temp.push(i);
-    }
-    setLabels(temp);
-  }, []);
-
-  const graphData = {
-    // labels,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: [{x: 1, y: 100}, {x: 100, y: 200}, {x: 900, y: 250}],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        showLine: true,
-      },
-      {
-        label: 'Dataset 2',
-        data: [{x: 20, y: 100}, {x: 50, y: 500}, {x: 100, y: 420}, {x: 150, y: 250}],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        showLine: true,
-      },
-      {
-        label: 'Dataset 3',
-        data: [],
-        borderColor: 'rgb(100, 100, 255)',
-        backgroundColor: 'rgba(100, 100, 100, 0.5)'
-      },
-    ],
-    options: {
-      scales: {
-        xAxes: [{
-         display: true,
-          scaleLabel: {
-            display: true,
-          },
-          ticks: {
-            min: 0,
-            max: 30,
-            stepSize: 1
-          }
-        }],
-        yAxes: [{
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
           display: true,
-          scaleLabel: {
-            display: true,
-            labelString: "Size (no. of elements)"
+          text: 'Time',
+          color: 'white',
+          font: {
+            size: 24,
           }
-        }]
+        },
+        ticks: {
+          color: 'white'
+        }
+      },
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'n',
+          color: 'white',
+          font: {
+            size: 24,
+            style: 'italic'
+          }
+        },
+        ticks: {
+          color: 'white'
+        }
       }
     }
   };
+
+  const graphData = { datasets };
 
   return (
     <Scatter options={options} data={graphData} />

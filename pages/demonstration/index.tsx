@@ -3,10 +3,21 @@ import Graph from "../../components/graph";
 import { data } from "../../lib/data";
 import { calculateTime } from "../../lib/functions/helperFunctions";
 
+export interface PointObject {
+  n: number;
+  time: number;
+  sortName: string;
+}
+
 export default function Demonstration() {
   const [chosenSort, setChosenSort] = useState<Function>(() => data[0].func);
   const [n, setN] = useState(1);
   const [time, setTime] = useState(0);
+  const [point, setPoint] = useState<PointObject>({
+    time: 0,
+    n: 0,
+    sortName: 'Bubble Sort'
+  });
 
   const handleChangeSort = (func: Function) => setChosenSort(() => func);
 
@@ -21,6 +32,9 @@ export default function Demonstration() {
     const time = calculateTime(n, chosenSort);
 
     setTime(time);
+
+    // Consolidate time, n, and chosenSort into point
+    setPoint({ time, n, sortName: 'Bubble Sort' })
   };
 
   return (
@@ -72,7 +86,7 @@ export default function Demonstration() {
         </button>
       </form>
       <div className="w-[66vw]">
-        <Graph />
+        <Graph point={point} />
       </div>
     </div>
   )
