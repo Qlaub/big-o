@@ -1,25 +1,14 @@
 import { BaseSyntheticEvent, useState } from "react";
 import Graph from "../../components/graph";
-import { data } from "../../lib/data";
+import { data, SortAlgoObj } from "../../lib/data";
 import { calculateTime } from "../../lib/functions/helperFunctions";
 
-export interface PointObject {
-  n: number;
-  time: number;
-  sortName: string;
-}
-
 export default function Demonstration() {
-  const [chosenSort, setChosenSort] = useState<Function>(() => data[0].func);
+  const [chosenSort, setChosenSort] = useState<SortAlgoObj>(data[0]);
   const [n, setN] = useState(1);
   const [time, setTime] = useState(0);
-  const [point, setPoint] = useState<PointObject>({
-    time: 0,
-    n: 0,
-    sortName: 'Bubble Sort'
-  });
 
-  const handleChangeSort = (func: Function) => setChosenSort(() => func);
+  const handleChangeSort = (sort: SortAlgoObj) => setChosenSort(sort);
 
   const handleChangeN = (val: number) => setN(val);
 
@@ -29,12 +18,9 @@ export default function Demonstration() {
     if (!chosenSort) return;
     if (!n || n < 1) return;
 
-    const time = calculateTime(n, chosenSort);
+    const time = calculateTime(n, chosenSort.func);
 
     setTime(time);
-
-    // Consolidate time, n, and chosenSort into point
-    setPoint({ time, n, sortName: 'Bubble Sort' })
   };
 
   return (
@@ -51,10 +37,10 @@ export default function Demonstration() {
                   p-2 
                   hover:bg-white 
                   hover:text-black 
-                  ${sort.func === chosenSort && 'bg-white text-black'}`
+                  ${sort.func === chosenSort.func && 'bg-white text-black'}`
                 }
-                onClick={() => handleChangeSort(sort.func)}
-                disabled={sort.func === chosenSort && true}
+                onClick={() => handleChangeSort(sort)}
+                disabled={sort.func === chosenSort.func && true}
               >
                 {sort.name}
               </button>
@@ -86,7 +72,7 @@ export default function Demonstration() {
         </button>
       </form>
       <div className="w-[66vw]">
-        <Graph point={point} />
+        <Graph sort={chosenSort} n={n} time={time} />
       </div>
     </div>
   )

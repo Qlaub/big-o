@@ -10,7 +10,14 @@ import {
   timSort, 
 } from "./functions/sortAlgorithms";
 
-export const data = [
+export interface SortAlgoObj {
+  name: string;
+  func: Function;
+  borderColor: string;
+  backgroundColor: string;
+}
+
+export const data: Array<SortAlgoObj> = [
   {
     name: 'Bubble Sort',
     func: bubbleSort,

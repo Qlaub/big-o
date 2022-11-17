@@ -10,8 +10,7 @@ import {
 } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
-import { data } from "../../lib/data";
-import { PointObject } from '../../pages/demonstration';
+import { data, SortAlgoObj } from "../../lib/data";
 
 interface DataPointObject {
   x: number;
@@ -26,7 +25,13 @@ interface DatasetObject {
   showLine: boolean;
 }
 
-export default function Graph({ point }: { point: PointObject }) {
+interface GraphProps {
+  sort: SortAlgoObj;
+  n: number;
+  time: number;
+}
+
+export default function Graph({ sort, n, time }: GraphProps) {
   const [datasets, setDatasets] = useState<Array<DatasetObject>>(
     data.map(({ name, borderColor, backgroundColor }) => {
       return {
@@ -39,20 +44,30 @@ export default function Graph({ point }: { point: PointObject }) {
     })
   );
 
+  // Add new data to graph
   useEffect(() => {
-    if (point.n === 0) return;
+    addDataPoint();
+  }, [time]);
 
+  const addDataPoint = () => {
     let index = 0;
-    const set = datasets.find((o, i) => {
-      if (o.label === point.sortName) {
+
+    // Find index of matching sort in datasets array
+    datasets.find((o, i) => {
+      if (o.label === sort.name) {
         index = i;
         return true;
       }
     });
-    const newDataset = [...datasets]
-    newDataset[index].data.push({x: point.n, y: point.time})
+
+    // Create new array of data
+    const newDataset = [...datasets];
+
+    // Insert new data into array at correct index
+    newDataset[index].data.push({x: n, y: time});
+
     setDatasets(newDataset);
-  }, [point]);
+  };
 
   ChartJS.register(
     CategoryScale,
@@ -80,14 +95,15 @@ export default function Graph({ point }: { point: PointObject }) {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Time',
+          text: 'Time Elapsed (seconds)',
           color: 'white',
           font: {
             size: 24,
+            style: 'italic'
           }
         },
         ticks: {
-          color: 'white'
+          color: 'white',
         }
       },
       x: {
