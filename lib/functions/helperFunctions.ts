@@ -26,3 +26,9 @@ export const calculateTime = (n: number, sort: Function) => {
 
   return timeElapsed;
 };
+
+export const swapData = (data: Array<number>, index1: number, index2: number) => {
+  const temp = data[index1];
+  data[index1] = data[index2];
+  data[index2] = temp;
+};

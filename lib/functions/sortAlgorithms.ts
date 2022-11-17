@@ -1,3 +1,5 @@
+import { swapData } from "./helperFunctions";
+
 // Compares each element to next element and swaps if necessary
 export const bubbleSort = (data: Array<number>) => {
   const length = data.length;
@@ -7,9 +9,10 @@ export const bubbleSort = (data: Array<number>) => {
 
     for (let n = 0; n < length - i - 1; n++) {
       if (data[n] > data[n+1]) {
-        const temp = data[n];
-        data[n] = data[n+1];
-        data[n+1] = temp;
+        // const temp = data[n];
+        // data[n] = data[n+1];
+        // data[n+1] = temp;
+        swapData(data, n, n+1);
         isSwapped = true;
       }
     }
@@ -34,11 +37,10 @@ export const selectionSort = (data: Array<number>) => {
     }
 
     if (minIndex !== i) {
-      const temp = data[i];
-      data[i] = data[minIndex];
-      data[minIndex] = temp;
-      // test if the below code is more efficient for this block
-      // [data[i], data[minIndex]] = [data[minIndex], data[i]];
+      // const temp = data[i];
+      // data[i] = data[minIndex];
+      // data[minIndex] = temp;
+      swapData(data, i, minIndex);
     }
   }
 
@@ -65,36 +67,53 @@ export const insertionSort = (data: Array<number>) => {
   return data;
 };
 
-// 
-export const quickSort = (data: Array<number>, low = 0, high = data.length - 1) => {
-  const sort = () => {
-    if (low >= high) {
-      return;
-    } else {
-      const pivot: number = partition(data, low, high);
-      quickSort(data, low, pivot - 1);
-      quickSort(data, low, pivot + 1);
+// Break data into two parts around the chosen pivot
+// Pivot starts as the data at the middle index of the array
+// Data in the left side of the array is compared against the pivot, starting at lowest index
+// Left index is shifted right if the data at the left index is less than the pivot, stops if greater than pivot
+// Data in the right side of the array is compared against the pivot, starting at the highest index
+// Right index is shifted left if the data at the right index is greater than the pivot, stops if less than pivot
+// Data at the right and left indexes are swapped if left index data is less than or equal to the right index data
+// Left index is now the pivot
+// Recursively call sort function with new pivot
+export const quickSort = (data: Array<number>, left = 0, right = data.length - 1) => {
+  const sort = (data: Array<number>, left: number, right: number) => {
+    let index: number;
+
+    if (data.length > 1) {
+      index = partition(data, left, right);
+
+      if (left < index - 1) { // more elements on left side of pivot
+        sort(data, left, index - 1);
+      }
+
+      if (index < right) { // more elements on right side of pivot
+        sort(data, index, right);
+      }
     }
+
+    return data;
   };
 
-  const partition = (data: Array<number>, low: number, high: number) => {
-    const pivot = data[low];
-    let lowIndex = low + 1;
-    let highIndex = high;
+  const partition = (data: Array<number>, left: number, right: number) => {
+    const pivot = data[Math.floor((right + left) / 2)]; // Middle of array
+    let leftIndex = left;
+    let rightIndex = right;
 
-    while (true) {
-      while (lowIndex <= highIndex && data[lowIndex] <= pivot) lowIndex += 1;
-      while (highIndex >= lowIndex && data[highIndex] >= pivot) highIndex -= 1;
-      if (highIndex <= lowIndex) break;
-      [data[lowIndex], data[highIndex]] = [data[highIndex], data[lowIndex]];
+    while (leftIndex <= rightIndex) {
+      while (data[leftIndex] < pivot) leftIndex++;
+      while (data[rightIndex] > pivot) rightIndex--;
+
+      if (leftIndex <= rightIndex) {
+        swapData(data, leftIndex, rightIndex);
+        leftIndex++;
+        rightIndex--;
+      }
     }
-
-    [data[low], data[highIndex]] = [data[highIndex], data[low]];
-
-    return highIndex;
+    return leftIndex;
   };
 
-  sort();
+  sort(data, left, right);
 };
 
 //
