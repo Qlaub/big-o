@@ -67,7 +67,34 @@ export const insertionSort = (data: Array<number>) => {
 
 // 
 export const quickSort = (data: Array<number>, low = 0, high = data.length - 1) => {
+  const sort = () => {
+    if (low >= high) {
+      return;
+    } else {
+      const pivot: number = partition(data, low, high);
+      quickSort(data, low, pivot - 1);
+      quickSort(data, low, pivot + 1);
+    }
+  };
 
+  const partition = (data: Array<number>, low: number, high: number) => {
+    const pivot = data[low];
+    let lowIndex = low + 1;
+    let highIndex = high;
+
+    while (true) {
+      while (lowIndex <= highIndex && data[lowIndex] <= pivot) lowIndex += 1;
+      while (highIndex >= lowIndex && data[highIndex] >= pivot) highIndex -= 1;
+      if (highIndex <= lowIndex) break;
+      [data[lowIndex], data[highIndex]] = [data[highIndex], data[lowIndex]];
+    }
+
+    [data[low], data[highIndex]] = [data[highIndex], data[low]];
+
+    return highIndex;
+  };
+
+  sort();
 };
 
 //

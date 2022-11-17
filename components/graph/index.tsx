@@ -52,19 +52,21 @@ export default function Graph({ sort, n, time }: GraphProps) {
   const addDataPoint = () => {
     let index = 0;
 
-    // Find index of matching sort in datasets array
-    datasets.find((o, i) => {
+    // Find data and associated index to update in datasets array
+    const toUpdate = datasets.find((o, i) => {
       if (o.label === sort.name) {
         index = i;
         return true;
       }
     });
 
-    // Create new array of data
+    // Create new dataset array with identical data
     const newDataset = [...datasets];
 
-    // Insert new data into array at correct index
+    // Insert new data into object array at correct index
     newDataset[index].data.push({x: n, y: time});
+
+    // TO-DO: resort the datapoints if necessary before pushing
 
     setDatasets(newDataset);
   };
