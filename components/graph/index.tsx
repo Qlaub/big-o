@@ -29,9 +29,11 @@ interface GraphProps {
   sort: SortAlgoObj;
   n: number;
   time: number;
+  addPoint: boolean;
+  setAddPoint: Function;
 }
 
-export default function Graph({ sort, n, time }: GraphProps) {
+export default function Graph({ sort, n, time, addPoint, setAddPoint }: GraphProps) {
   const [datasets, setDatasets] = useState<Array<DatasetObject>>(
     data.map(({ name, borderColor, backgroundColor }) => {
       return {
@@ -46,8 +48,10 @@ export default function Graph({ sort, n, time }: GraphProps) {
 
   // Add new data to graph
   useEffect(() => {
+    if (!addPoint) return;
     addDataPoint();
-  }, [time]);
+    return setAddPoint(false);
+  }, [addPoint]);
 
   const addDataPoint = () => {
     let index = 0;
@@ -66,7 +70,7 @@ export default function Graph({ sort, n, time }: GraphProps) {
     // Insert new data into object array at correct index
     newDataset[index].data.push({x: n, y: time});
 
-    // TO-DO: resort the datapoints if necessary before pushing
+    // TO-DO: re-sort the datapoints if necessary before pushing
 
     setDatasets(newDataset);
   };

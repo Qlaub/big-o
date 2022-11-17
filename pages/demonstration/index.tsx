@@ -7,6 +7,7 @@ export default function Demonstration() {
   const [chosenSort, setChosenSort] = useState<SortAlgoObj>(data[0]);
   const [n, setN] = useState(1);
   const [time, setTime] = useState(0);
+  const [addPoint, setAddPoint] = useState(false);
 
   const handleChangeSort = (sort: SortAlgoObj) => setChosenSort(sort);
 
@@ -19,8 +20,9 @@ export default function Demonstration() {
     if (!n || n < 1) return;
 
     const time = calculateTime(n, chosenSort.func);
-
     setTime(time);
+
+    setAddPoint(true);
   };
 
   return (
@@ -72,7 +74,7 @@ export default function Demonstration() {
         </button>
       </form>
       <div className="w-[66vw]">
-        <Graph sort={chosenSort} n={n} time={time} />
+        <Graph sort={chosenSort} n={n} time={time} addPoint={addPoint} setAddPoint={setAddPoint} />
       </div>
     </div>
   )
