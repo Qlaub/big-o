@@ -77,26 +77,9 @@ export const insertionSort = (data: Array<number>) => {
 // Left index is now the pivot
 // Recursively call sort function with new pivot
 export const quickSort = (data: Array<number>, left = 0, right = data.length - 1) => {
-  const sort = (data: Array<number>, left: number, right: number) => {
-    let index: number;
-
-    if (data.length > 1) {
-      index = partition(data, left, right);
-
-      if (left < index - 1) { // more elements on left side of pivot
-        sort(data, left, index - 1);
-      }
-
-      if (index < right) { // more elements on right side of pivot
-        sort(data, index, right);
-      }
-    }
-
-    return data;
-  };
-
   const partition = (data: Array<number>, left: number, right: number) => {
     const pivot = data[Math.floor((right + left) / 2)]; // Middle of array
+  
     let leftIndex = left;
     let rightIndex = right;
 
@@ -113,7 +96,20 @@ export const quickSort = (data: Array<number>, left = 0, right = data.length - 1
     return leftIndex;
   };
 
-  sort(data, left, right);
+  (function sort (data: Array<number>, left: number, right: number) {
+    let index: number;
+
+    if (data.length > 1) {
+      index = partition(data, left, right);
+      
+      if (left < index - 1) sort(data, left, index - 1); // More elements on left side of pivot
+      
+      if (index < right) sort(data, index, right); // More elements on right side of pivot
+    }
+
+    return data;
+
+  })(data, left, right); // Self-invoking
 };
 
 //
