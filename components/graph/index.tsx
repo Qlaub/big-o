@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { data, SortAlgoObj } from "../../lib/data";
 
@@ -46,34 +46,31 @@ export default function Graph({ sort, n, time, addPoint, setAddPoint }: GraphPro
     })
   );
 
-  // Add new data to graph
-  useEffect(() => {
-    if (!addPoint) return;
-    addDataPoint();
-    return setAddPoint(false);
-  }, [addPoint]);
-
-  const addDataPoint = () => {
+  const addDataPoint = useCallback(() => {
     let index = 0;
-
     // Find data and associated index to update in datasets array
-    const toUpdate = datasets.find((o, i) => {
-      if (o.label === sort.name) {
+    const toUpdate = datasets.find((dataset, i) => {
+      if (dataset.label === sort.name) {
         index = i;
         return true;
       }
     });
-
     // Create new dataset array with identical data
     const newDataset = [...datasets];
-
     // Insert new data into object array at correct index
     newDataset[index].data.push({x: n, y: time});
 
     // TO-DO: re-sort the datapoints if necessary before pushing
 
     setDatasets(newDataset);
-  };
+  }, [n, time, sort, datasets]);
+
+  // Add new data point to graph
+  useEffect(() => {
+    if (!addPoint) return;
+    addDataPoint();
+    return setAddPoint(false);
+  }, [addPoint, addDataPoint, setAddPoint]);
 
   ChartJS.register(
     CategoryScale,
