@@ -22,9 +22,8 @@ export const calculateTime = (n: number, sort: Function) => {
   const time2: number = performance.now();
 
   // Calculate difference as time elapsed
-  const timeElapsed = (time2 - time1) / 1000; // Convert milliseconds to seconds
-
-  return timeElapsed;
+  const secondsElapsed = (time2 - time1) / 1000; // Convert milliseconds to seconds
+  return secondsElapsed;
 };
 
 export const swapData = (data: Array<number>, index1: number, index2: number) => {

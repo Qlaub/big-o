@@ -48,6 +48,7 @@ export const selectionSort = (data: Array<number>) => {
 };
 
 // For each index, compares each number to every number before it until the correct position is found
+// Used by JS sort method
 export const insertionSort = (data: Array<number>) => {
   const length = data.length;
 
@@ -112,9 +113,38 @@ export const quickSort = (data: Array<number>, left = 0, right = data.length - 1
   })(data, left, right); // Self-invoking
 };
 
-//
+// Default sort used by Mozilla
+// Significantly (read: suspiciously) longer to sort 1,000,000 numbers than quicksort - though expected, double check anyway
 export const mergeSort = (data: Array<number>) => {
+  const merge = (left: Array<number>, right: Array<number>) => {
+    let arr = []
+    // Break out of loop if any one of the array gets empty
+    while (left.length && right.length) {
+        // Pick the smaller among the smallest element of left and right sub arrays 
+        if (left[0] < right[0]) {
+            arr.push(left.shift())  
+        } else {
+            arr.push(right.shift()) 
+        }
+    }
+    
+    // Concatenating the leftover elements
+    // (in case we didn't go through the entire left or right array)
+    return [ ...arr, ...left, ...right ]
+  };
 
+  (function sort (data: Array<number>): any {
+    const half = data.length / 2
+    
+    // Base case or terminating case
+    if(data.length < 2){
+      return data 
+    }
+    
+    const left = data.splice(0, half)
+    return merge(sort(left),sort(data))
+  })(data);
+  
 };
 
 //
