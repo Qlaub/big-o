@@ -15,12 +15,12 @@ No installation will be required after deployment.
 Users can select from a variety of implemented sorting algorithms, choose the size of their sort data, and compare and contrast results between different sorts. Information regarding the different sorting methods will be available, including commented code for the implemented sorting algorithms and where they are commonly used. Currently the page is in development and will be deployed soon.
 
 ## Tech Used
-React
-Next.js
-Node.js
-Chart.js
-TypeScript
-Tailwind
+- React
+- Next.js
+- Node.js
+- Chart.js
+- TypeScript
+- Tailwind
 
 ## Questions
 Feel free to email me with any questions at gilbertglaubitz@gmail.com or take a look at my [GitHub](https://github.com/Qlaub)
