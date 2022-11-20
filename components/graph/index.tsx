@@ -35,8 +35,7 @@ interface GraphProps {
 
 export default function Graph({ sort, n, time, addPoint, setAddPoint }: GraphProps) {
   // Sets up datasets equal to the number of sort algorithms
-  // TODO: only add a dataset after data has been recorded
-  // This will minimize screen clutter
+  // TODO: only add a dataset after data has been recorded, which will minimize screen clutter
   // Initialize datasets as empty array
   // When data comes in, check for dataset name in datasets
   // If no dataset present, create dataset 
