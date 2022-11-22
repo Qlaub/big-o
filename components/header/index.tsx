@@ -3,6 +3,8 @@ import { Nav } from "../nav";
 export const Header = () => {
 
   return (
-    <Nav />
+    <header className="width-100vw flex">
+      <Nav />
+    </header>
   )
 };
