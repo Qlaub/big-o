@@ -147,9 +147,38 @@ export const mergeSort = (data: Array<number>) => {
   
 };
 
-//
+// TODO - how to determine bucket size based on array length
 export const bucketSort = (data: Array<number>) => {
-
+  if (data.length === 0) {
+      return data;
+  }
+  let i,
+  minValue = data[0],
+  maxValue = data[0],
+  bucketSize = 5;
+  data.forEach(function (currentVal) {
+      if (currentVal < minValue) {
+        minValue = currentVal;
+      } else if (currentVal > maxValue) {
+        maxValue = currentVal;
+      }
+  })
+  let bucketCount = Math.floor((maxValue - minValue) / bucketSize) + 1;
+  let allBuckets = new Array(bucketCount);
+  for (i = 0; i < allBuckets.length; i++) {
+      allBuckets[i] = [];
+  }
+  data.forEach(function (currentVal) {
+      allBuckets[Math.floor((currentVal - minValue) / bucketSize)].push(currentVal);
+  });
+  data.length = 0;
+  allBuckets.forEach(function(bucket) {
+      insertionSort(bucket);
+      bucket.forEach(function(element: number) {
+        data.push(element)
+      });
+  });
+  return data;
 };
 
 //
