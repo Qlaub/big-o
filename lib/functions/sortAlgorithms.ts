@@ -54,20 +54,18 @@ export const selectionSort = (data: Array<number>) => {
 
 // For each index, compares each number to every number before it until the correct position is found
 // Used by JS sort method
-export const insertionSort = (data: Array<number>) => {
-  const length = data.length;
+export const insertionSort = (data: Array<number>, left = 0, right = data.length) => {
 
-  for (let i = 1; i < length; i++) {
+  for (let i = left + 1; i <= right; i++) {
     const temp = data[i];
+    let minIndex = i - 1;
 
-    let minIndex = i;
-
-    while (minIndex > 0 && temp < data[minIndex - 1]) {
-      data[minIndex] = data[minIndex - 1];
-      minIndex -= 1
+    while (minIndex >= left && data[minIndex] > temp) {
+      data[minIndex + 1] = data[minIndex];
+      minIndex --;
     }
 
-    data[minIndex] = temp;
+    data[minIndex + 1] = temp;
   }
 
   return data;
