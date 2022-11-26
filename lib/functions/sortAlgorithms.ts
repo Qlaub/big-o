@@ -213,7 +213,46 @@ export const shellSort = (data: Array<number>, length = data.length) => {
 
 //
 export const heapSort = (data: Array<number>) => {
+  (function (data){
+    const length = data.length;
 
+    // Build heap (rearrange array)
+    for (let i = Math.floor(length / 2) - 1; i >= 0; i--)
+      heapify(data, length, i);
+
+    // One by one extract an element from heap
+    for (let i = length - 1; i > 0; i--) {
+      // Move current root to end
+      swapData(data, data[0], data[i]);
+
+      // call max heapify on the reduced heap
+      heapify(data, i, 0);
+    }
+  })(data);
+
+  // To heapify a subtree rooted with node i which is
+  // an index in arr[]. n is size of heap
+  function heapify(data: number[],length: number, i: number) {
+    let largest = i; // Initialize largest as root
+    const l = 2 * i + 1; // left = 2*i + 1
+    const r = 2 * i + 2; // right = 2*i + 2
+
+    // If left child is larger than root
+    if (l < length && data[l] > data[largest])
+      largest = l;
+
+    // If right child is larger than largest so far
+    if (r < length && data[r] > data[largest])
+      largest = r;
+
+    // If largest is not root
+    if (largest != i) {
+      swapData(data, data[i], data[largest]);
+
+      // Recursively heapify the affected sub-tree
+      heapify(data, length, largest);
+    }
+  }
 };
 
 //
