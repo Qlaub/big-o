@@ -1,4 +1,9 @@
 import { swapData } from "./helperFunctions";
+// What's happening in each?
+// What situations would each sort be useful in?
+// What are the constraints of each sort?
+// Predict the performance difference between running in the frontend vs backend
+// Record the actual difference
 
 // Compares each element to next element and swaps if necessary
 export const bubbleSort = (data: Array<number>) => {
@@ -155,7 +160,7 @@ export const bucketSort = (data: Array<number>) => {
   let i,
   minValue = data[0],
   maxValue = data[0],
-  bucketSize = 5;
+  bucketSize = Math.sqrt(data.length);
   data.forEach(function (currentVal) {
       if (currentVal < minValue) {
         minValue = currentVal;
@@ -182,8 +187,28 @@ export const bucketSort = (data: Array<number>) => {
 };
 
 //
-export const shellSort = (data: Array<number>, length: number) => {
+export const shellSort = (data: Array<number>, length = data.length) => {
+	// Start with a really large gap, and then reduce the gap until there isn't any
+	// With this, the gap starts as half of the array length, and then half of that every time
+	for (let gap = Math.floor(length / 2); gap > 0; gap = Math.floor(gap / 2))
+	{
+		// Do an insertion sort for each of the section the gap ends up dividing
+		for (let outer = gap; outer < length; outer ++)
+		{
+			// We store the current variable
+			let temp = data[outer];
+			
+			// This is the insertion sort to sort the section into order
+			let inner;
+			for (inner = outer; inner >= gap && data[inner - gap] > temp; inner -= gap)
+			{
+				data[inner] = data[inner - gap];
+			}
 
+			data[inner] = temp;
+		}
+	}
+	return data;
 };
 
 //
