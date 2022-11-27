@@ -8,27 +8,34 @@ export default function Demonstration() {
   const [time, setTime] = useState(-1);
   const [working, setWorking] = useState(false);
 
-  // Web worker
+  // ---- Web worker ----
   const workerRef = useRef<Worker>();
 
   useEffect(() => {
-    // Register
-    workerRef.current = new Worker(new URL('../../worker.ts', import.meta.url));
-
-    // Handle response
-    workerRef.current.onmessage = (event: MessageEvent<number>) => { 
-      if (event.data !== -1) {
-        setTime(event.data);
-        setWorking(false);
-      } else {
-        console.log('error');
-      }
-    }
+    setupWorker();
 
     return () => {
       workerRef.current?.terminate();
     }
   }, []);
+
+  const setupWorker = () => {
+    // Register
+    workerRef.current = new Worker(new URL('../../worker.ts', import.meta.url));
+
+    // Handle response
+    workerRef.current.onmessage = (event: MessageEvent<number>) => { 
+      if (event.data !== -1) setTime(event.data);
+      else console.log('error');
+      setWorking(false);
+    };
+  };
+
+  const stopWorking = () => {
+    workerRef.current?.terminate();
+    setWorking(false);
+    setupWorker();
+  };
   // -----
 
   const handleChange = (data: number | SortAlgoObj) => {
@@ -39,6 +46,7 @@ export default function Demonstration() {
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault();
 
+    if (working) return stopWorking();
     if (!chosenSort) return;
     if (!n || n < 1) return;
 
