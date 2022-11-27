@@ -142,10 +142,10 @@ export default function Demonstration() {
         </button>
       </form>
       <div className={`w-full flex flex-col items-center`}>
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full flex justify-end items-center">
           <div className="rotate-[270deg] w-[24px]">time</div>
           <div className="bg-white rounded w-full mr-[6px]">
-            <Graph sort={chosenSort} n={n} time={time} />
+            <Graph sort={chosenSort} n={n} time={time} working={working} />
           </div>
         </div>
         <p>size</p>

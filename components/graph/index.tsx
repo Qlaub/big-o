@@ -29,9 +29,10 @@ interface GraphProps {
   sort: SortAlgoObj;
   n: number;
   time: number;
+  working: boolean;
 }
 
-export default function Graph({ sort, n, time }: GraphProps) {
+export default function Graph({ sort, n, time, working }: GraphProps) {
   // Sets up datasets equal to the number of sort algorithms
   // TODO: only add a dataset after data has been recorded, which will minimize screen clutter
   // Initialize datasets as empty array
@@ -59,7 +60,7 @@ export default function Graph({ sort, n, time }: GraphProps) {
 
   // Add new data point to graph
   useEffect(() => {
-    if (time === -1) return;
+    if (time === -1 || working) return;
 
     (() => {
       let index = 0;
@@ -79,7 +80,7 @@ export default function Graph({ sort, n, time }: GraphProps) {
   
       setDatasets(newDataset);
     })();
-  }, [time]);
+  }, [time, working]);
 
   ChartJS.register(
     CategoryScale,
