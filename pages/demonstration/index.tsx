@@ -1,6 +1,8 @@
 import { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
 import Graph from "../../components/graph";
 import { data, SortAlgoObj } from "../../lib/data";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Demonstration() {
   const [chosenSort, setChosenSort] = useState<SortAlgoObj>(data[0]);
@@ -48,11 +50,27 @@ export default function Demonstration() {
 
     if (working) return stopWorking();
     if (!chosenSort) return;
-    if (!n || n < 1) return;
+    if (!n || n < 1 || n > 100000000) return;
 
     setWorking(true);
     workerRef.current?.postMessage({n, name: chosenSort.name});
+
+    setTimeout(() => {
+      notify();
+    }, 3000);
   };
+
+  const notify = () => {
+    return toast.info('Taking too long? Press the spinning button to stop sorting.', {
+      position: "bottom-center",
+      autoClose: 80000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
 
   return (
     <div className="w-100vw flex items-center flex-col gap-5">
@@ -117,6 +135,7 @@ export default function Demonstration() {
       <div className="w-[66vw]">
         <Graph sort={chosenSort} n={n} time={time} />
       </div>
+      <ToastContainer />
     </div>
   )
 };
