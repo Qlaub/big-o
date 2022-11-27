@@ -1,9 +1,34 @@
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
 import Graph from "../../components/graph";
 import { data, SortAlgoObj } from "../../lib/data";
 import { calculateTime } from "../../lib/functions/helperFunctions";
 
 export default function Demonstration() {
+
+  // Web worker
+  const workerRef = useRef<Worker>()
+
+  useEffect(() => {
+    // Register
+    workerRef.current = new Worker(new URL('../../worker.ts', import.meta.url));
+
+    // Handle response
+    workerRef.current.onmessage = (event: MessageEvent<string>) => {
+      console.log(`web worker response: ${event.data}`);      
+    }
+
+    return () => {
+      console.log("i'll be back. EAUGH!")
+      workerRef.current?.terminate();
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('sending message from page');
+    workerRef.current?.postMessage('hi');
+  }, []);
+  // -----
+
   const [chosenSort, setChosenSort] = useState<SortAlgoObj>(data[0]);
   const [n, setN] = useState(1);
   const [time, setTime] = useState(0);
@@ -18,6 +43,8 @@ export default function Demonstration() {
 
     if (!chosenSort) return;
     if (!n || n < 1) return;
+
+    workerRef.current?.postMessage({n, name: chosenSort.name});
 
     const time = calculateTime(n, chosenSort.func);
     setTime(time);
