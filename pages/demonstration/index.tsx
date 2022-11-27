@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useMemo, useRef, useState } from "react";
 import Graph from "../../components/graph";
 import { data, SortAlgoObj } from "../../lib/data";
 import { ToastContainer, toast } from 'react-toastify';
@@ -40,6 +40,30 @@ export default function Demonstration() {
   };
   // -----
 
+  // ---- Toast notification ----
+  const notify = () => {
+    return toast.info('Taking too long? Press the spinning button to stop sorting.', {
+      position: "bottom-center",
+      autoClose: 8000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  useEffect(() => {
+    if (!working) return;
+    const toastTimer = setTimeout(notify, 4000);
+
+    return () => {
+      clearTimeout(toastTimer);
+    }
+  }, [working]);
+  // ----
+
+  // ---- Handlers ----
   const handleChange = (data: number | SortAlgoObj) => {
     if (typeof data === 'number') setN(data);
     else setChosenSort(data);
@@ -54,23 +78,8 @@ export default function Demonstration() {
 
     setWorking(true);
     workerRef.current?.postMessage({n, name: chosenSort.name});
-
-    setTimeout(() => {
-      notify();
-    }, 3000);
   };
-
-  const notify = () => {
-    return toast.info('Taking too long? Press the spinning button to stop sorting.', {
-      position: "bottom-center",
-      autoClose: 80000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
+  // ----
 
   return (
     <div className="w-100vw flex items-center flex-col gap-5">
