@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { data, SortAlgoObj } from "../../lib/data";
 
@@ -57,25 +57,6 @@ export default function Graph({ sort, n, time }: GraphProps) {
     })
   );
 
-  const addDataPoint = useCallback(() => {
-    let index = 0;
-    // Find data and associated index to update in datasets array
-    const toUpdate = datasets.find((dataset, i) => {
-      if (dataset.label === sort.name) {
-        index = i;
-        return true;
-      }
-    });
-    // Create new dataset array with identical data
-    const newDataset = [...datasets];
-    // Insert new data into object array at correct index
-    newDataset[index].data.push({x: n, y: time});
-
-    // TO-DO: re-sort the data points if necessary before pushing
-
-    setDatasets(newDataset);
-  }, [n, time, sort, datasets]);
-
   // Add new data point to graph
   useEffect(() => {
     if (time === -1) return;
@@ -114,6 +95,7 @@ export default function Graph({ sort, n, time }: GraphProps) {
     responsive: true,
     plugins: {
       legend: {
+        display: false,
         position: 'top',
       },
       title: {
@@ -125,31 +107,31 @@ export default function Graph({ sort, n, time }: GraphProps) {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
-          text: 'Time Elapsed (seconds)',
-          color: 'white',
+          display: false,
+          text: 'Time Elapsed (s)',
+          color: 'black',
           font: {
-            size: 24,
+            size: 16,
             style: 'italic'
           }
         },
         ticks: {
-          color: 'white',
+          color: 'black',
         }
       },
       x: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: 'n',
-          color: 'white',
+          color: 'black',
           font: {
-            size: 24,
+            size: 16,
             style: 'italic'
           }
         },
         ticks: {
-          color: 'white'
+          color: 'black'
         }
       }
     }

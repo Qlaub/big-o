@@ -141,7 +141,7 @@ export const data: Array<SortAlgoObj> = [
   {
     name: 'Tim Sort',
     func: timSort,
-    borderColor: 'white',
+    borderColor: 'black',
     backgroundColor: 'white',
     timeComplexity: {
       worst: '0(n*log(n))',

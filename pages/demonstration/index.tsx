@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useEffect, useMemo, useRef, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
 import Graph from "../../components/graph";
 import { data, SortAlgoObj } from "../../lib/data";
 import { ToastContainer, toast } from 'react-toastify';
@@ -38,7 +38,7 @@ export default function Demonstration() {
     setWorking(false);
     setupWorker();
   };
-  // -----
+  // ----
 
   // ---- Toast notification ----
   const notify = () => {
@@ -82,8 +82,8 @@ export default function Demonstration() {
   // ----
 
   return (
-    <div className="w-100vw flex items-center flex-col gap-5">
-      <ul className="w-100vw flex items-center justify-center space-between gap-3">
+    <div className={`w-full flex items-center flex-col`}>
+      <ul className="max-w-full flex flex-wrap items-center justify-center space-between">
         {data.map((sort, i) => {
           return (
             <li key={i}>
@@ -141,8 +141,14 @@ export default function Demonstration() {
           }
         </button>
       </form>
-      <div className="w-[66vw]">
-        <Graph sort={chosenSort} n={n} time={time} />
+      <div className={`w-full flex flex-col items-center`}>
+        <div className="w-full flex justify-center items-center">
+          <div className="rotate-[270deg] w-[24px]">time</div>
+          <div className="bg-white rounded w-full mr-[6px]">
+            <Graph sort={chosenSort} n={n} time={time} />
+          </div>
+        </div>
+        <p>size</p>
       </div>
       <ToastContainer />
     </div>
