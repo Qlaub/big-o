@@ -83,6 +83,16 @@ export default function Demonstration() {
 
   return (
     <div className={`w-full flex items-center flex-col`}>
+      <h2 className="">Chart</h2>
+      <section className={`w-full flex flex-col items-center`}>
+        <div className="w-full flex justify-end items-center">
+          <p className="rotate-[270deg] w-[24px]">time</p>
+          <div className="bg-white rounded w-full mr-[6px]">
+            <Graph sort={chosenSort} n={n} time={time} working={working} />
+          </div>
+        </div>
+        <p>size</p>
+      </section>
       <ul className="max-w-full flex flex-wrap items-center justify-center space-between">
         {data.map((sort, i) => {
           return (
@@ -141,15 +151,6 @@ export default function Demonstration() {
           }
         </button>
       </form>
-      <div className={`w-full flex flex-col items-center`}>
-        <div className="w-full flex justify-end items-center">
-          <div className="rotate-[270deg] w-[24px]">time</div>
-          <div className="bg-white rounded w-full mr-[6px]">
-            <Graph sort={chosenSort} n={n} time={time} working={working} />
-          </div>
-        </div>
-        <p>size</p>
-      </div>
       <ToastContainer />
     </div>
   )
