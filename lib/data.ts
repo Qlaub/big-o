@@ -7,7 +7,8 @@ import {
   bucketSort,
   shellSort,
   heapSort,
-  timSort, 
+  timSort,
+  randomSort, 
 } from "./functions/sortAlgorithms";
 
 export interface SortAlgoObj {
@@ -152,4 +153,18 @@ export const data: Array<SortAlgoObj> = [
     stable: true,
     inPlace: false, // needs verification - strict or loose definition?
   },
+  {
+    name: 'Random Sort',
+    func: randomSort,
+    borderColor: 'teal',
+    backgroundColor: 'teal',
+    timeComplexity: {
+      worst: 'O(∞)',
+      best: 'O(n)',
+      average: 'O(n!)'
+    },
+    spaceComplexity: '0(1)',
+    stable: false,
+    inPlace: false,
+  }
 ];

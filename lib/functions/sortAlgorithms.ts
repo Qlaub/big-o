@@ -1,4 +1,5 @@
 import { swapData } from "./helperFunctions";
+import { knuthShuffle } from './shuffleAlgorithms';
 // What's happening in each?
 // What situations would each sort be useful in?
 // What are the constraints of each sort?
@@ -360,3 +361,21 @@ export const timSort = (data: Array<number>) => {
     }
   })(data, data.length);
 };
+
+export const randomSort = (data: number[]) => {
+  let attempts = 0;
+
+  const checkOrder = (data: number[]) => {
+    for (let i = 0; i < data.length - 1; i++) {
+      if (data[i] > data[i+1]) return false;
+    }
+    return true;
+  };
+
+  while (true) {
+    attempts++;
+    const randomizedData = knuthShuffle(data);
+    const isSorted = checkOrder(randomizedData);
+    if (isSorted) return attempts;
+  }
+}
