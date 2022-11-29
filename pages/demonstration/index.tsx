@@ -8,7 +8,7 @@ export default function Demonstration() {
   const [chosenSort, setChosenSort] = useState<SortAlgoObj>(data[0]);
   const [n, setN] = useState(1);
   const [time, setTime] = useState(-1);
-  const [working, setWorking] = useState(false);
+  const [status, setStatus] = useState('idle');
 
   // ---- Web worker ----
   const workerRef = useRef<Worker>();
@@ -27,15 +27,20 @@ export default function Demonstration() {
 
     // Handle response
     workerRef.current.onmessage = (event: MessageEvent<number>) => { 
-      if (event.data !== -1) setTime(event.data);
-      else console.log('error');
-      setWorking(false);
+      if (event.data !== -1) {
+        setTime(event.data);
+        setStatus('done');
+      } else {
+        console.log('error');
+        setStatus('idle');
+      }
+      
     };
   };
 
   const stopWorking = () => {
     workerRef.current?.terminate();
-    setWorking(false);
+    setStatus('idle');
     setupWorker();
   };
   // ----
@@ -54,13 +59,13 @@ export default function Demonstration() {
   };
 
   useEffect(() => {
-    if (!working) return;
+    if (status === 'idle') return;
     const toastTimer = setTimeout(notify, 4000);
 
     return () => {
       clearTimeout(toastTimer);
     }
-  }, [working]);
+  }, [status]);
   // ----
 
   // ---- Handlers ----
@@ -72,11 +77,11 @@ export default function Demonstration() {
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault();
 
-    if (working) return stopWorking();
+    if (status === 'working') return stopWorking();
     if (!chosenSort) return;
     if (!n || n < 1 || n > 100000000) return;
 
-    setWorking(true);
+    setStatus('working');
     workerRef.current?.postMessage({n, name: chosenSort.name});
   };
   // ----
@@ -88,7 +93,7 @@ export default function Demonstration() {
         <div className="w-full flex justify-end items-center">
           <p className="rotate-[270deg] w-[24px]">time</p>
           <div className="bg-white rounded w-full mr-[6px]">
-            <Graph sort={chosenSort} n={n} time={time} working={working} />
+            <Graph sort={chosenSort} n={n} time={time} status={status} setStatus={setStatus} />
           </div>
         </div>
         <p>size</p>
@@ -136,7 +141,7 @@ export default function Demonstration() {
           <span>seconds</span>
         </div>
         <button className="bg-white text-black rounded-lg h-10 w-24 flex items-center justify-center">
-          {working ?
+          {status !== 'idle' ?
             <div className="inline-block w-8 h-8 
               border-4
               border-t-black

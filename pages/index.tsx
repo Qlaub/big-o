@@ -69,7 +69,7 @@ export default function Home() {
       </section>
       <section id="suggestions">
         <h2>Want to see another sorting algorithm added?</h2>
-        <p>Type in a suggestion below and if possible I'll add it to the website!</p>
+        <p>Type in a suggestion below and if possible I&apos;ll add it to the website!</p>
         <textarea typeof='input'></textarea>
         <button>Submit</button>
         <div>
