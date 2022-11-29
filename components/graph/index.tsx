@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { data, SortAlgoObj } from "../../lib/data";
 
@@ -58,28 +58,29 @@ export default function Graph({ sort, n, time, working }: GraphProps) {
     })
   );
 
+  const addDataPoint = useCallback(() => {
+    let index = 0;
+    // Find data and associated index to update in datasets array
+    const toUpdate = datasets.find((dataset, i) => {
+      if (dataset.label === sort.name) {
+        index = i;
+        return true;
+      }
+    });
+    // Create new dataset array with identical data
+    const newDataset = [...datasets];
+    // Insert new data into object array at correct index
+    newDataset[index].data.push({x: n, y: time});
+
+    // TO-DO: re-sort the data points if necessary before pushing
+
+    setDatasets(newDataset);
+  }, [n, time, sort, datasets]);
+
   // Add new data point to graph
   useEffect(() => {
     if (time === -1 || working) return;
-
-    (() => {
-      let index = 0;
-      // Find data and associated index to update in datasets array
-      const toUpdate = datasets.find((dataset, i) => {
-        if (dataset.label === sort.name) {
-          index = i;
-          return true;
-        }
-      });
-      // Create new dataset array with identical data
-      const newDataset = [...datasets];
-      // Insert new data into object array at correct index
-      newDataset[index].data.push({x: n, y: time});
-  
-      // TO-DO: re-sort the data points if necessary before pushing
-  
-      setDatasets(newDataset);
-    })();
+    addDataPoint();
   }, [time, working]);
 
   ChartJS.register(

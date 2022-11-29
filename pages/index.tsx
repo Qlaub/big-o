@@ -53,15 +53,15 @@ export default function Home() {
               </div>
               <div>
                 <h3>When or where might this sorting algorithm be useful?</h3>
-                <p>Need to add additional key of 'where' to the data object with information for this section</p>
+                <p>Need to add additional key of &apos;where&apos; to the data object with information for this section</p>
               </div>
               <div>
-                <h3>Here's the code used for this sorting algorithm on this website:</h3>
-                <p>Need to add additional key of 'code' to the data object with code including comments</p>
+                <h3>Here&apos;s the code used for this sorting algorithm on this website:</h3>
+                <p>Need to add additional key of &apos;code&apos; to the data object with code including comments</p>
               </div>
               <div>
-                <h3>Here's how this code works written out in plain English</h3>
-                <p>Need to add additional key of 'explanation' to the data object with a step by step explanation</p>
+                <h3>Here&apos;s how this code works written out in plain English</h3>
+                <p>Need to add additional key of &apos;explanation&apos; to the data object with a step by step explanation</p>
               </div>
             </div>
           )
