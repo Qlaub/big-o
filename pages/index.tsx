@@ -27,9 +27,9 @@ export default function Home() {
       </article>
       <section id="sorts">
         {/* These will be cards that are selectable from a dropdown */}
-        {data.map(sort => {
+        {data.map((sort, i) => {
           return (
-            <div>
+            <div key={i}>
               <div>
                 <h3>{sort.name} at a glance</h3>
                 <div>
