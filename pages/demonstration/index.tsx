@@ -12,6 +12,10 @@ export default function Demonstration() {
 
   // ---- Web worker ----
   const workerRef = useRef<Worker>();
+  const workerRef2 = useRef<Worker>();
+  const workerRef3 = useRef<Worker>();
+  const workerRef4 = useRef<Worker>();
+  const workerRef5 = useRef<Worker>();
 
   useEffect(() => {
     setupWorker();
@@ -24,6 +28,10 @@ export default function Demonstration() {
   const setupWorker = () => {
     // Register
     workerRef.current = new Worker(new URL('../../worker.ts', import.meta.url));
+    workerRef2.current = new Worker(new URL('../../worker2.ts', import.meta.url));
+    workerRef3.current = new Worker(new URL('../../worker3.ts', import.meta.url));
+    workerRef4.current = new Worker(new URL('../../worker4.ts', import.meta.url));
+    workerRef5.current = new Worker(new URL('../../worker5.ts', import.meta.url));
 
     // Handle response
     workerRef.current.onmessage = (event: MessageEvent<number>) => { 
@@ -34,8 +42,20 @@ export default function Demonstration() {
         console.log('error');
         setStatus('idle');
       }
-      
     };
+
+    workerRef2.current.onmessage = (event: MessageEvent<string>) => {
+      console.log(event.data);
+    }
+    workerRef3.current.onmessage = (event: MessageEvent<string>) => {
+      console.log(event.data);
+    }
+    workerRef4.current.onmessage = (event: MessageEvent<string>) => {
+      console.log(event.data);
+    }
+    workerRef5.current.onmessage = (event: MessageEvent<string>) => {
+      console.log(event.data);
+    }
   };
 
   const stopWorking = () => {
@@ -83,6 +103,10 @@ export default function Demonstration() {
 
     setStatus('working');
     workerRef.current?.postMessage({n, name: chosenSort.name});
+    workerRef2.current?.postMessage('hi');
+    workerRef3.current?.postMessage('hi');
+    workerRef4.current?.postMessage('hi');
+    workerRef5.current?.postMessage('hi');
   };
   // ----
 
