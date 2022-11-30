@@ -83,7 +83,7 @@ export default function Graph({ sort, n, time, status, setStatus }: GraphProps) 
     if (time === -1 || status !== 'done') return;
     addDataPoint();
     setStatus('idle');
-  }, [time, status, addDataPoint]);
+  }, [time, status, addDataPoint, setStatus]);
 
   ChartJS.register(
     CategoryScale,
