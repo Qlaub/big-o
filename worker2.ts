@@ -1,24 +1,11 @@
 import { data } from './lib/data';
 import { calculateTime } from './lib/functions/helperFunctions';
+import { AlgorithmInput } from './worker';
 
-interface Message {
-  n: number;
-  name: string;
-}
-
-addEventListener('message', (event: MessageEvent<Message>) => {
-  postMessage('hello from worker 2');
-  // const {n, name} = event.data;
-  // const sort = data.find(sort => sort.name === name);
-  // if (sort) {
-  //   try {
-  //     const timeElapsed = calculateTime(n, sort.func);
-  //     postMessage(timeElapsed);
-  //   } catch(err) {
-  //     console.log(err);
-  //     postMessage(-1);
-  //   }
-  // } else {
-  //   postMessage(-1);
-  // }
+addEventListener('message', (event: MessageEvent<AlgorithmInput>) => {
+  const { n, name } = event.data;
+  const sort = data.find(sort => sort.name === name);
+  if (!sort) return;
+  const timeElapsed = calculateTime(n, sort.func);
+  postMessage(timeElapsed);
 });

@@ -31,3 +31,27 @@ export const swapData = (data: Array<number>, index1: number, index2: number) =>
   data[index1] = data[index2];
   data[index2] = temp;
 };
+
+export const averageTimeSeconds = (times: any[]) => {
+  let sum = 0;
+  for (let i = 0; i < times.length; i++) {
+    if (typeof times[i] !== 'number') break;
+    sum += times[i];
+  }
+  const average = sum / times.length;
+
+  return average;
+}
+
+export const firstLetterToUppercase = (word: string) => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+export const chooseBackgroundColor = (status: string) => {
+  let color = '#ffffff';
+  if (status === 'working') color = '#fef08a';
+  if (status === 'complete') color = '#86efac';
+  if (status === 'stopped') color = '#f87171';
+
+  return color;
+};

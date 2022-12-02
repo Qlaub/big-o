@@ -1,23 +1,15 @@
 import { data } from './lib/data';
 import { calculateTime } from './lib/functions/helperFunctions';
 
-interface Message {
+export interface AlgorithmInput {
   n: number;
   name: string;
 }
 
-addEventListener('message', (event: MessageEvent<Message>) => {
-  const {n, name} = event.data;
+addEventListener('message', (event: MessageEvent<AlgorithmInput>) => {
+  const { n, name } = event.data;
   const sort = data.find(sort => sort.name === name);
-  if (sort) {
-    try {
-      const timeElapsed = calculateTime(n, sort.func);
-      postMessage(timeElapsed);
-    } catch(err) {
-      console.log(err);
-      postMessage(-1);
-    }
-  } else {
-    postMessage(-1);
-  }
+  if (!sort) return;
+  const timeElapsed = calculateTime(n, sort.func);
+  postMessage(timeElapsed);
 });

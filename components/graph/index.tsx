@@ -11,6 +11,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { data, SortAlgoObj } from "../../lib/data";
+import { SubmittedSort } from '../../pages/demonstration';
 
 interface DataPointObject {
   x: number;
@@ -26,14 +27,14 @@ interface DatasetObject {
 }
 
 interface GraphProps {
-  sort: SortAlgoObj;
+  sorts: SubmittedSort[];
+  setSubmittedSorts: Function;
   n: number;
-  time: number;
   status: string;
   setStatus: Function;
 }
 
-export default function Graph({ sort, n, time, status, setStatus }: GraphProps) {
+export default function Graph({ sorts, n, status, setStatus, setSubmittedSorts }: GraphProps) {
   // Sets up datasets equal to the number of sort algorithms
   // TODO: only add a dataset after data has been recorded, which will minimize screen clutter
   // Initialize datasets as empty array
@@ -59,31 +60,37 @@ export default function Graph({ sort, n, time, status, setStatus }: GraphProps) 
     })
   );
 
-  const addDataPoint = useCallback(() => {
-    let index = 0;
-    // Find data and associated index to update in datasets array
+  const addDataPoint = useCallback((sortIndex: number) => {
+    let datasetIndex = 0;
+    // Find data and associated datasetIndex to update in datasets array
     const toUpdate = datasets.find((dataset, i) => {
-      if (dataset.label === sort.name) {
-        index = i;
+      if (dataset.label === sorts[sortIndex].name) {
+        datasetIndex = i;
         return true;
       }
     });
     // Create new dataset array with identical data
     const newDataset = [...datasets];
-    // Insert new data into object array at correct index
-    newDataset[index].data.push({x: n, y: time});
+    const newTime = sorts[sortIndex].timeSeconds;
+    if (newTime === null) return;
+    // Insert new data into object array at correct datasetIndex
+    newDataset[datasetIndex].data.push({x: n, y: newTime});
 
     // TO-DO: re-sort the data points if necessary before pushing
-
     setDatasets(newDataset);
-  }, [n, time, sort, datasets]);
+
+    // Set status to complete on submitted sorts
+    sorts[sortIndex].status = 'complete';
+    setSubmittedSorts([...sorts]);
+  }, [n, sorts, datasets]);
 
   // Add new data point to graph
   useEffect(() => {
-    if (time === -1 || status !== 'done') return;
-    addDataPoint();
+    const dataIndex = sorts.findIndex(sort => sort.status === 'ready');
+    if (dataIndex === -1) return;
+    addDataPoint(dataIndex);
     setStatus('idle');
-  }, [time, status, addDataPoint, setStatus]);
+  }, [status, addDataPoint, setStatus]);
 
   ChartJS.register(
     CategoryScale,
